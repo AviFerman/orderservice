@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: orderservicespring.application.name=orderservice
+  docker:
+    compose:
+      enabled: false
