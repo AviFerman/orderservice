@@ -1,4 +1,4 @@
-package com.orderprocessing.orderservice.dro;
+package com.orderprocessing.orderservice.dto;
 
 import com.orderprocessing.orderservice.enums.CategoryEnum;
 import jakarta.validation.constraints.Min;

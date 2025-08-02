@@ -1,10 +1,12 @@
-package com.orderprocessing.orderservice.dro;
+package com.orderprocessing.orderservice.dto;
 
 import com.orderprocessing.orderservice.enums.OrderStatusEnum;
+import lombok.Data;
 
 import java.time.ZonedDateTime;
 import java.util.List;
 
+@Data
 public class OrderData {
 
     private String orderId;

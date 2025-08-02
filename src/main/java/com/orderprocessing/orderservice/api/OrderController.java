@@ -2,7 +2,7 @@ package com.orderprocessing.orderservice.api;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.orderprocessing.orderservice.dro.OrderRequest;
+import com.orderprocessing.orderservice.dto.OrderRequest;
 import com.orderprocessing.orderservice.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
