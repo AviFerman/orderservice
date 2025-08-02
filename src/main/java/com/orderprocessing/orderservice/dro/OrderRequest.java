@@ -1,5 +1,7 @@
 package com.orderprocessing.orderservice.dro;
 
+import com.orderprocessing.orderservice.enums.CategoryEnum;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -9,10 +11,10 @@ import java.util.List;
 
 @Data
 public class OrderRequest {
-    @NotNull
+    @NotEmpty
     private String orderId;
 
-    @NotNull
+    @NotEmpty
     private String customerName;
 
     @NotEmpty
@@ -27,14 +29,15 @@ public class OrderRequest {
     // Getters and Setters
     @Data
     public static class Item {
-        @NotNull
+        @NotEmpty
         private String productId;
 
         @NotNull
+        @Min(0)
         private Integer quantity;
 
         @NotNull
-        private String category;
+        private CategoryEnum category;
 
         // Getters and Setters
     }
