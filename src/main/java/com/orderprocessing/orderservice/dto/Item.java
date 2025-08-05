@@ -1,9 +1,7 @@
 package com.orderprocessing.orderservice.dto;
 
 import com.orderprocessing.orderservice.enums.CategoryEnum;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import com.orderprocessing.orderservice.enums.ItemAvailabilityEnum;
 import lombok.Builder;
 import lombok.Data;
 
@@ -13,5 +11,6 @@ public class Item {
     private String productId;
     private Integer quantity;
     private CategoryEnum category;
+    private ItemAvailabilityEnum availability;
 
 }

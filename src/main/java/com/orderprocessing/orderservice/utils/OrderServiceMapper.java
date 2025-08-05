@@ -19,6 +19,7 @@ public class OrderServiceMapper {
                         .productId(item.getProductId())
                         .quantity(item.getQuantity())
                         .category(item.getCategory())
+                        .availability(null)
                         .build()) // Map properties from OrderRequest.Item to Item
                 .collect(Collectors.toList()));
         orderData.setRequestedAt(orderRequest.getRequestedAt());
