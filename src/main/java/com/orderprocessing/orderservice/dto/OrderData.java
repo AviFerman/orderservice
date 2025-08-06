@@ -8,7 +8,6 @@ import java.util.List;
 
 @Data
 public class OrderData {
-
     private String orderId;
     private String customerName;
     private ZonedDateTime requestedAt;

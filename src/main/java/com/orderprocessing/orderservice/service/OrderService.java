@@ -19,7 +19,6 @@ public class OrderService {
 
     public String createOrder(OrderRequest orderRequest) throws JsonProcessingException {
 
-
         log.info("createOrder:: Processing order request: {}", orderRequest);
         OrderData orderData = mapOrderRequestToOrderData(orderRequest);
         redisService.writeJson("order:" + orderData.getOrderId(), orderData);
@@ -30,6 +29,4 @@ public class OrderService {
         log.info("createOrder:: OrderEvent sent to Kafka");
         return orderData.getOrderId();
     }
-
-
 }

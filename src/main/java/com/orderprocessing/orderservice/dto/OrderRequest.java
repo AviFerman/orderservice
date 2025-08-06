@@ -26,7 +26,6 @@ public class OrderRequest {
     @NotNull
     private String correlationId;
 
-    // Getters and Setters
     @Data
     public static class Item {
         @NotEmpty
@@ -38,7 +37,5 @@ public class OrderRequest {
 
         @NotNull
         private CategoryEnum category;
-
-        // Getters and Setters
     }
 }

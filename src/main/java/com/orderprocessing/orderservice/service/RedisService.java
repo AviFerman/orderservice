@@ -19,6 +19,5 @@ public class RedisService {
         String jsonValue = objectMapper.writeValueAsString(value);
         redisTemplate.opsForValue().set(key, jsonValue);
         log.info("writeJson:: Stored JSON in Redis with key: {}", key);
-
     }
 }
