@@ -3,6 +3,7 @@ package com.orderprocessing.orderservice.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.orderprocessing.orderservice.dto.OrderRequest;
+import com.orderprocessing.orderservice.dto.OrderResponse;
 import com.orderprocessing.orderservice.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -25,10 +26,10 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<String> createOrder(@Valid @RequestBody OrderRequest orderRequest) throws JsonProcessingException {
+    public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody OrderRequest orderRequest) throws JsonProcessingException {
         log.info("createOrder:: Received order request: {}", orderRequest);
         String orderId = orderService.createOrder(orderRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body("Order received with ID: " + orderId);
+                .body(new OrderResponse(orderId, "Order received successfully"));
     }
 }

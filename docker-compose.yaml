@@ -1,7 +1,6 @@
-version: '3.8'
 services:
   redis:
-    image: redis:7.0
+    image: redis:7.2-alpine
     container_name: redis
     ports:
       - "6379:6379"
@@ -10,6 +9,11 @@ services:
       - redis-data:/data
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.4.0
@@ -33,11 +37,60 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_CREATE_TOPICS: "order.event:1:1,inventory.check.result.event:1:1"
+      KAFKA_CREATE_TOPICS: "order.event:1:1,inventory.check.result.event:1:1,notification.event:1:1"
     networks:
       - app-network
 
-docker
+  orderservice:
+    image: orderservice:latest
+    container_name: orderservice
+    ports:
+      - "8080:8080"
+    environment:
+      - TZ=Asia/Jerusalem
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - SPRING_KAFKA_TOPIC_ORDER_EVENT=order.event
+      - SPRING_KAFKA_TOPIC_INVENTORY_CHECK=inventory.check.result.event
+    depends_on:
+      - redis
+      - kafka
+    networks:
+      - app-network
+
+  inventoryservice:
+    image: inventoryservice:latest
+    container_name: inventoryservice
+    ports:
+      - "8081:8080"
+    environment:
+      - TZ=Asia/Jerusalem
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - SPRING_KAFKA_TOPIC_INVENTORY_CHECK=inventory.check.result.event
+    depends_on:
+      - redis
+      - kafka
+    networks:
+      - app-network
+
+  notificationservice:
+    image: notificationservice:latest
+    container_name: notificationservice
+    ports:
+      - "8082:8080"
+    environment:
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - SPRING_KAFKA_TOPIC_NOTIFICATION=notification.event
+    depends_on:
+      - redis
+      - kafka
+    networks:
+      - app-network
 
 volumes:
   redis-data:
@@ -45,4 +98,3 @@ volumes:
 networks:
   app-network:
     driver: bridge
-
