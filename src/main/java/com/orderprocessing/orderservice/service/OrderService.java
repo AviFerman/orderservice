@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.orderprocessing.orderservice.dto.OrderData;
 import com.orderprocessing.orderservice.dto.OrderEvent;
 import com.orderprocessing.orderservice.dto.OrderRequest;
+import com.orderprocessing.orderservice.repository.OrderDataRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,12 +17,13 @@ import static com.orderprocessing.orderservice.utils.OrderServiceMapper.mapOrder
 public class OrderService {
     private final RedisService redisService;
     private final KafkaProducerService kafkaProducerService;
+    private final OrderDataRepository redisOrderDataRepository;
 
     public String createOrder(OrderRequest orderRequest) throws JsonProcessingException {
 
         log.info("createOrder:: Processing order request: {}", orderRequest);
         OrderData orderData = mapOrderRequestToOrderData(orderRequest);
-        redisService.writeJson("order:" + orderData.getOrderId(), orderData);
+        redisOrderDataRepository.save(orderData);
         log.info("createOrder:: Order stored in Redis with ID: {} and OrderData {}", orderData.getOrderId(), orderData);
         kafkaProducerService.sendOrderEvent(OrderEvent.builder()
                 .orderId(orderData.getOrderId())
